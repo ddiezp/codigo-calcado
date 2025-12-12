@@ -1,0 +1,125 @@
+import java.util.Scanner;
+import java.util.Random;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+        Random rand = new Random();
+
+        // Initialize stats
+        int energy = rand.nextInt(21) + 40;
+        int hygiene = rand.nextInt(21) + 40;
+        int weight = rand.nextInt(21) + 40;
+        int mood = rand.nextInt(21) + 40;
+
+        // Clamp stats between 0 and 100
+        energy = Math.min(100, Math.max(0, energy));
+        hygiene = Math.min(100, Math.max(0, hygiene));
+        weight = Math.min(100, Math.max(0, weight));
+        mood = Math.min(100, Math.max(0, mood));
+
+        // Choose pet
+        System.out.println("Choose your pet: cat or dog");
+        String petType = input.next();
+        String name = "";
+
+        if (petType.equalsIgnoreCase("dog")) {
+            System.out.println("Enter a name for your dog:");
+            name = input.next();
+        } else if (petType.equalsIgnoreCase("cat")) {
+            System.out.println("Enter a name for your cat:");
+            name = input.next();
+        } else {
+            System.out.println("Invalid choice. Exiting...");
+            input.close();
+            return;
+        }
+
+        boolean playing = true;
+        while (playing) {
+            // Show current stats
+            System.out.println("\n" + name + "'s stats:");
+            System.out.println("Energy: " + energy);
+            System.out.println("Hygiene: " + hygiene);
+            System.out.println("Weight: " + weight);
+            System.out.println("Mood: " + mood);
+            System.out.println();
+
+            // Show menu
+            System.out.println("VIRTUAL PET MENU");
+            System.out.println("------------------------------");
+            System.out.println("1. Sleep");
+            System.out.println("2. Play");
+            System.out.println("3. Eat");
+            if (petType.equalsIgnoreCase("dog")) {
+                System.out.println("4. Shower");
+            } else {
+                System.out.println("4. Self-clean");
+            }
+            System.out.println("0. Exit");
+
+            int action = input.nextInt();
+
+            switch (action) {
+                case 1: // Sleep
+                    if (petType.equalsIgnoreCase("dog")) {
+                        energy += 25;
+                    } else {
+                        energy += 20;
+                    }
+                    mood += 10;
+                    System.out.println(name + " slept and feels more rested.");
+                    break;
+
+                case 2: // Play
+                    energy -= 15;
+                    mood += 20;
+                    hygiene -= 10;
+                    System.out.println(name + " played and feels happier.");
+                    break;
+
+                case 3: // Eat
+                    weight += 10;
+                    energy += 10;
+                    mood += 5;
+                    System.out.println(name + " ate and feels full.");
+                    break;
+
+                case 4: // Shower or Self-clean
+                    if (petType.equalsIgnoreCase("dog")) {
+                        hygiene += 30;
+                        mood -= 5;
+                        System.out.println(name + " took a shower and is cleaner.");
+                    } else {
+                        hygiene += 20;
+                        mood += 5;
+                        System.out.println(name + " self-cleaned and feels fresh.");
+                    }
+                    break;
+
+                case 0: // Exit
+                    playing = false;
+                    System.out.println("Goodbye!");
+                    break;
+
+                default:
+                    System.out.println("Invalid option.");
+            }
+
+            // Check for stat limits
+            if (energy < 0 || energy > 100 || hygiene < 0 || hygiene > 100 || weight < 0 || weight > 100 || mood < 0 || mood > 100) {
+                System.out.println("\n⚠️ " + name + " has reached a critical stat limit.");
+                System.out.println("The application will now close to protect your pet.");
+                break;
+            }
+
+            // Clamp stats again
+            energy = Math.min(100, Math.max(0, energy));
+            hygiene = Math.min(100, Math.max(0, hygiene));
+            weight = Math.min(100, Math.max(0, weight));
+            mood = Math.min(100, Math.max(0, mood));
+        }
+
+        input.close();
+    }
+}
